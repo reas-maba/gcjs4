@@ -1,0 +1,130 @@
+  0: 1043-n000001-Shiba_Dog
+  1: 1121-n000002-French_bulldog
+  2: 1160-n000003-Siberian_husky
+  3: 1324-n000004-malamute
+  4: 1936-n000005-Pomeranian
+  5: 200-n000008-Airedale
+  6: 200-n000010-miniature_poodle
+  7: 200-n000012-affenpinscher
+  8: 201-n000024-schipperke
+  9: 202-n000020-Australian_terrier
+ 10: 202-n000023-Welsh_springer_spaniel
+ 11: 202-n000028-curly_coated_retriever
+ 12: 203-n000015-Staffordshire_bullterrier
+ 13: 203-n000016-Norwich_terrier
+ 14: 203-n000021-Tibetan_terrier
+ 15: 203-n000022-English_setter
+ 16: 203-n000027-Norfolk_terrier
+ 17: 205-n000029-Pembroke
+ 18: 205-n000030-Tibetan_mastiff
+ 19: 206-n000007-Border_terrier
+ 20: 206-n000035-Great_Dane
+ 21: 206-n000037-Scotch_terrier
+ 22: 206-n000047-flat_coated_retriever
+ 23: 206-n000051-Saluki
+ 24: 207-n000011-Irish_setter
+ 25: 207-n000026-Blenheim_spaniel
+ 26: 207-n000036-Irish_terrier
+ 27: 207-n000044-bloodhound
+ 28: 207-n000045-redbone
+ 29: 209-n000040-West_Highland_white_terrier
+ 30: 209-n000042-Brabancon_griffo
+ 31: 209-n000043-dhole
+ 32: 209-n000049-kelpie
+ 33: 209-n000054-Doberman
+ 34: 210-n000006-Ibizan_hound
+ 35: 210-n000048-vizsla
+ 36: 211-n000009-cairn
+ 37: 211-n000018-German_shepherd
+ 38: 211-n000025-African_hunting_dog
+ 39: 211-n000052-Dandie_Dinmont
+ 40: 211-n000058-Sealyham_terrier
+ 41: 211-n000059-German_short_haired_pointer
+ 42: 211-n000061-Bernese_mountain_dog
+ 43: 211-n000068-Saint_Bernard
+ 44: 214-n000019-Leonberg
+ 45: 214-n000033-Bedlington_terrier
+ 46: 215-n000031-Newfoundland
+ 47: 215-n000038-Lhasa
+ 48: 215-n000075-Chesapeake_Bay_retriever
+ 49: 216-n000017-Lakeland_terrier
+ 50: 216-n000063-Walker_hound
+ 51: 216-n000078-American_Staffordshire_terrier
+ 52: 217-n000014-otterhound
+ 53: 217-n000034-Sussex_spaniel
+ 54: 217-n000046-Norwegian_elkhound
+ 55: 217-n000050-bluetick
+ 56: 217-n000079-dingo
+ 57: 219-n000066-Irish_water_spaniel
+ 58: 2192-n000088-Samoyed
+ 59: 220-n000032-Fila Braziliero
+ 60: 220-n000053-standard_schnauzer
+ 61: 220-n000069-Mexican_hairless
+ 62: 221-n000055-EntleBucher
+ 63: 222-n000013-Afghan_hound
+ 64: 223-n000067-kuvasz
+ 65: 223-n000074-English_foxhound
+ 66: 223-n000092-keeshond
+ 67: 224-n000039-Irish_wolfhound
+ 68: 224-n000056-Scottish_deerhound
+ 69: 224-n000060-Rottweiler
+ 70: 225-n000062-black_and_tan_coonhound
+ 71: 225-n000073-Great_Pyrenees
+ 72: 225-n000082-boxer
+ 73: 226-n000057-wire_haired_fox_terrier
+ 74: 226-n000064-borzoi
+ 75: 227-n000070-groenendael
+ 76: 227-n000094-collie
+ 77: 228-n000085-Gordon_setter
+ 78: 229-n000087-Kerry_blue_terrier
+ 79: 230-n000041-briard
+ 80: 230-n000080-Rhodesian_ridgeback
+ 81: 230-n000084-Boston_bull
+ 82: 231-n000077-bull_mastiff
+ 83: 231-n000081-silky_terrier
+ 84: 232-n000076-Brittany_spaniel
+ 85: 232-n000083-Eskimo_dog
+ 86: 232-n000089-giant_schnauzer
+ 87: 233-n000071-malinois
+ 88: 233-n000072-Bouvier_des_Flandres
+ 89: 234-n000065-whippet
+ 90: 234-n000091-Appenzeller
+ 91: 234-n000093-Chinese_Crested_Dog
+ 92: 2342-n000102-miniature_schnauzer
+ 93: 235-n000090-soft_coated_wheaten_terrier
+ 94: 235-n000096-Weimaraner
+ 95: 235-n000097-clumber
+ 96: 237-n000086-Greater_Swiss_Mountain_dog
+ 97: 237-n000095-toy_terrier
+ 98: 238-n000099-Italian_greyhound
+ 99: 241-n000100-basset
+100: 243-n000103-basenji
+101: 245-n000098-Australian_Shepherd
+102: 249-n000101-Maltese_dog
+103: 249-n000106-Japanese_spaniel
+104: 253-n000105-Cane_Carso
+105: 253-n000107-Japanese_Spitzes
+106: 257-n000108-Old_English_sheepdog
+107: 258-n000104-Black_sable
+108: 2594-n000109-Border_collie
+109: 274-n000110-Shetland_sheepdog
+110: 276-n000112-English_springer
+111: 276-n000113-beagle
+112: 286-n000111-cocker_spaniel
+113: 2909-n000116-Cardigan
+114: 2925-n000114-toy_poodle
+115: 3083-n000117-Bichon_Frise
+116: 316-n000118-standard_poodle
+117: 318-n000115-komondor
+118: 329-n000119-chow
+119: 3336-n000121-chinese_rural_dog
+120: 340-n000120-Yorkshire_terrier
+121: 3580-n000122-Labrador_retriever
+122: 361-n000123-Shih_Tzu
+123: 420-n000124-Chihuahua
+124: 480-n000125-Pekinese
+125: 5355-n000126-golden_retriever
+126: 561-n000127-miniature_pinscher
+127: 7449-n000128-teddy
+128: 798-n000130-pug
+129: 806-n000129-papillon

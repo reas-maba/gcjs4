@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/28945721/README.md)
 # DogBreeds Recognizer V1.0
 
 🐕 狗品种识别系统
