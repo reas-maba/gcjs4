@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>犬种智能识别系统</title>
+    <style>
+        * {box-sizing: border-box; margin: 0; padding: 0;}
+        .container {width: 90%; max-width: 1000px; margin: 30px auto;}
+        .upload-box {border: 2px dashed #666; padding: 40px; text-align: center; margin: 20px 0;}
+        button {padding: 10px 24px; cursor: pointer; background: #2478ff; color: #fff; border: none; border-radius: 4px;}
+        #result-area {margin-top: 30px;}
+        .breed-card {border: 1px solid #eee; padding: 12px; margin: 8px 0; border-radius: 6px;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>犬种智能识别系统</h1>
+    <div class="upload-box" id="uploadBox">
+        <p>点击或拖拽上传狗狗图片</p>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+    </div>
+    <button id="recBtn">开始识别</button>
+    <div id="preview"></div>
+    <div id="result-area"></div>
+</div>
+
+<script>
+// 全局变量
+const API_BASE = "http://127.0.0.1:5000";
+let selectFile = null;
+
+// 1. 上传交互模块
+const UploadModule = {
+    init() {
+        const box = document.getElementById("uploadBox");
+        const input = document.getElementById("fileInput");
+        box.onclick = () => input.click();
+        box.ondragover = e => e.preventDefault();
+        box.ondrop = (e) => {
+            e.preventDefault();
+            selectFile = e.dataTransfer.files[0];
+            this.showPreview();
+        }
+        input.onchange = () => {
+            selectFile = input.files[0];
+            this.showPreview();
+        }
+    },
+    showPreview() {
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById("preview").innerHTML = `<img src="${e.target.result}" width="300">`
+        }
+        reader.readAsDataURL(selectFile);
+    }
+}
+
+// 2. 请求接口模块
+const HttpModule = {
+    async predictImg(file) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch(`${API_BASE}/predict`, {
+            method: "POST",
+            body: fd
+        })
+        return await res.json();
+    }
+}
+
+// 3. 页面渲染模块
+const RenderModule = {
+    renderResult(data) {
+        const wrap = document.getElementById("result-area");
+        let html = "<h3>Top5识别结果</h3>";
+        data.forEach(item => {
+            html += `
+                <div class="breed-card">
+                    <p>品种：${item.breed_cn} / ${item.breed_en}</p>
+                    <p>置信度：${item.confidence}%</p>
+                </div>
+            `
+        })
+        wrap.innerHTML = html;
+    }
+}
+
+// 主逻辑绑定
+window.onload = () => {
+    UploadModule.init();
+    document.getElementById("recBtn").onclick = async () => {
+        if (!selectFile) return alert("请先上传图片");
+        const res = await HttpModule.predictImg(selectFile);
+        if (res.code === 200) RenderModule.renderResult(res.data);
+        else alert(res.msg);
+    }
+}
+</script>
+</body>
+</html>
