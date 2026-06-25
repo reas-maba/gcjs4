@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>犬种智能识别系统 V1.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        header {
+            background: #165DFF;
+            color: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        header h1 {
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .tab-wrap {
+            display: flex;
+            background: white;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 6px #eee;
+        }
+        .tab-item {
+            padding: 14px 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .tab-item.active {
+            background: #165DFF;
+            color: white;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        /* 上传区域 */
+        .upload-area {
+            border: 2px dashed #c0c6d0;
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #165DFF;
+            background: #f0f7ff;
+        }
+        .upload-area p {
+            font-size: 17px;
+            color: #666;
+        }
+        #file-input {
+            display: none;
+        }
+        .btn {
+            padding: 11px 28px;
+            background: #165DFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #0e4bdb;
+        }
+        .preview-box {
+            margin: 20px 0;
+        }
+        .preview-box img {
+            max-width: 320px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+        .result-list {
+            margin-top: 30px;
+        }
+        .breed-item {
+            padding: 16px 20px;
+            border: 1px solid #e6e8eb;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .breed-item:hover {
+            border-color: #165DFF;
+            cursor: pointer;
+        }
+        /* 百科页面 */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        #search-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .breed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .breed-card {
+            border: 1px solid #eee;
+            padding: 16px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .breed-card:hover {
+            box-shadow: 0 2px 10px #e0e8ff;
+            border-color: #165DFF;
+        }
+        /* 弹窗 */
+        .mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+        .mask.show {
+            display: flex;
+        }
+        .modal {
+            width: 90%;
+            max-width: 700px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #888;
+        }
+        .info-row {
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #165DFF;
+            min-width: 110px;
+            display: inline-block;
+        }
+        .tag-group span {
+            background: #e6f0ff;
+            color: #165DFF;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin: 4px 6px 4px 0;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>基于深度学习的犬种智能识别系统</h1>
+</header>
+
+<div class="tab-wrap">
+    <div class="tab-item active" data-page="rec-page">图片识别</div>
+    <div class="tab-item" data-page="wiki-page">狗狗百科</div>
+</div>
+
+<div class="container">
+    <!-- 识别页面 -->
+    <div id="rec-page" class="page active">
+        <div class="upload-area" id="uploadBox">
+            <p>点击或拖拽图片到此处上传（JPG/PNG）</p>
+            <input type="file" id="file-input" accept="image/jpeg,image/png">
+        </div>
+        <button class="btn" id="rec-btn">开始识别</button>
+        <div class="preview-box" id="previewBox"></div>
+        <div class="result-list" id="resultWrap"></div>
+    </div>
+
+    <!-- 百科页面 -->
+    <div id="wiki-page" class="page">
+        <div class="search-bar">
+            <input id="search-input" placeholder="输入犬种名称、产地、性格搜索">
+            <button class="btn" id="search-btn">搜索</button>
+        </div>
+        <div class="breed-grid" id="wikiGrid"></div>
+    </div>
+</div>
+
+<!-- 详情弹窗遮罩 -->
+<div class="mask" id="mask">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-title">犬种详情</h2>
+            <span class="close-btn" id="closeModal">×</span>
+        </div>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script>
+// 全局配置
+const API_HOST = "http://127.0.0.1:5000";
+let currentFile = null;
+let allBreedData = {};
+
+// 页面切换模块
+const TabModule = {
+    init() {
+        const tabs = document.querySelectorAll(".tab-item");
+        const pages = document.querySelectorAll(".page");
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                const targetId = tab.dataset.page;
+                tabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                pages.forEach(p => p.classList.remove("active"));
+                document.getElementById(targetId).classList.add("active");
+                // 切换百科自动加载数据
+                if(targetId === "wiki-page" && Object.keys(allBreedData).length === 0) {
+                    HttpModule.getAllWiki();
+                }
+            }
+        })
+    }
+}
+
+// 上传预览模块
+const UploadModule = {
+    init() {
+        const box = document.getElementById("uploadBox");
+        const input = document.getElementById("file-input");
+        box.onclick = () => input.click();
+        box.ondragover = e => e.preventDefault();
+        box.ondrop = e => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if(file) this.setFile(file);
+        }
+        input.onchange = () => {
+            const file = input.files[0];
+            if(file) this.setFile(file);
+        }
+    },
+    setFile(file) {
+        currentFile = file;
+        const reader = new FileReader();
+        reader.onload = ev => {
+            document.getElementById("previewBox").innerHTML = `<img src="${ev.target.result}" alt="预览图">`;
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+// 网络请求封装
+const HttpModule = {
+    async predictImage(file) {
+        const form = new FormData();
+        form.append("file", file);
+        const res = await fetch(`${API_HOST}/predict`, {
+            method: "POST",
+            body: form
+        })
+        return await res.json();
+    },
+    async getAllWiki() {
+        const res = await fetch(`${API_HOST}/breeds/all`);
+        const json = await res.json();
+        if(json.code === 200) {
+            allBreedData = json.data;
+            WikiModule.renderList(allBreedData);
+        }
+    },
+    async getSingleBreed(name) {
+        const res = await fetch(`${API_HOST}/breed/detail?breed=${encodeURIComponent(name)}`);
+        return await res.json();
+    }
+}
+
+// 识别结果渲染
+const RecRender = {
+    render(data) {
+        const wrap = document.getElementById("resultWrap");
+        let html = `<h3>Top5 识别结果</h3>`;
+        data.forEach(item => {
+            html += `
+                <div class="breed-item" data-breed="${item.breed_cn}">
+                    <div>
+                        <strong>${item.breed_cn}</strong> (${item.breed_en})
+                    </div>
+                    <div>置信度：${item.confidence}%</div>
+                </div>
+            `
+        })
+        wrap.innerHTML = html;
+        // 点击查看详情
+        document.querySelectorAll(".breed-item").forEach(el => {
+            el.onclick = async () => {
+                const breed = el.dataset.breed;
+                const infoRes = await HttpModule.getSingleBreed(breed);
+                if(infoRes.code === 200) ModalModule.show(infoRes.data);
+            }
+        })
+    }
+}
+
+// 百科页面渲染
+const WikiModule = {
+    renderList(data) {
+        const grid = document.getElementById("wikiGrid");
+        let html = "";
+        Object.keys(data).forEach(name => {
+            const item = data[name];
+            html += `
+                <div class="breed-card" data-name="${name}">
+                    <h4>${name}</h4>
+                    <p style="color:#666;">${item.name_en}</p>
+                    <p>产地：${item.origin}</p>
+                </div>
+            `
+        })
+        grid.innerHTML = html;
+        document.querySelectorAll(".breed-card").forEach(card => {
+            card.onclick = async () => {
+                const name = card.dataset.name;
+                const res = await HttpModule.getSingleBreed(name);
+                ModalModule.show(res.data);
+            }
+        })
+    },
+    search(keyword) {
+        if(!keyword) return this.renderList(allBreedData);
+        const filter = {};
+        Object.keys(allBreedData).forEach(name => {
+            const info = allBreedData[name];
+            const kw = keyword.toLowerCase();
+            if(name.includes(kw) || info.name_en.toLowerCase().includes(kw) || info.origin.includes(kw)) {
+                filter[name] = info;
+            }
+        })
+        this.renderList(filter);
+    }
+}
+
+// 弹窗详情模块
+const ModalModule = {
+    mask: document.getElementById("mask"),
+    titleDom: document.getElementById("modal-title"),
+    bodyDom: document.getElementById("modal-body"),
+    show(info) {
+        this.titleDom.innerText = `${info.name} / ${info.name_en}`;
+        let tagTemp = "";
+        info.temperament.forEach(t => tagTemp += `<span>${t}</span>`);
+        let colorTemp = "";
+        info.color.forEach(c => colorTemp += `<span>${c}</span>`);
+        this.bodyDom.innerHTML = `
+            <div class="info-row">
+                <span class="info-label">原产地：</span>${info.origin}
+            </div>
+            <div class="info-row">
+                <span class="info-label">体型：</span>${info.size}
+            </div>
+            <div class="info-row">
+                <span class="info-label">体重/身高：</span>${info.weight} / ${info.height}
+            </div>
+            <div class="info-row">
+                <span class="info-label">寿命：</span>${info.lifespan}
+            </div>
+            <div class="info-row">
+                <span class="info-label">毛发：</span>${info.coat}
+            </div>
+            <div class="info-row">
+                <span class="info-label">毛色：</span>
+                <div class="tag-group">${colorTemp}</div>
+            </div>
+            <div class="info-row">
+                <span class="info-label">性格特点：</span>
+                <div class="tag-group">${tagTemp}</div>
+            </div>
+            <div class="info-row">
+                <span class="info-label">运动量：</span>${info.activity_level}
+            </div>
+            <div class="info-row">
+                <span class="info-label">训练难度：</span>${info.trainability}
+            </div>
+            <div class="info-row">
+                <span class="info-label">适合家庭：</span>${info.family_friendly ? "是" : "否"}
+            </div>
+            <div class="info-row">
+                <span class="info-label">适合公寓：</span>${info.apartment_friendly ? "是" : "否"}
+            </div>
+            <div class="info-row" style="margin-top:20px;">
+                <span class="info-label">品种介绍：</span>
+                <p style="margin-top:8px;line-height:1.8;">${info.description}</p>
+            </div>
+        `;
+        this.mask.classList.add("show");
+    },
+    close() {
+        this.mask.classList.remove("show");
+    }
+}
+
+// 全局初始化
+window.onload = () => {
+    TabModule.init();
+    UploadModule.init();
+    // 识别按钮点击
+    document.getElementById("rec-btn").onclick = async () => {
+        if(!currentFile) return alert("请先上传图片");
+        const res = await HttpModule.predictImage(currentFile);
+        if(res.code === 200) RecRender.render(res.data);
+        else alert(res.msg);
+    }
+    // 搜索按钮
+    document.getElementById("search-btn").onclick = () => {
+        const kw = document.getElementById("search-input").value.trim();
+        WikiModule.search(kw);
+    }
+    // 关闭弹窗
+    document.getElementById("closeModal").onclick = () => ModalModule.close();
+    document.getElementById("mask").onclick = e => {
+        if(e.target.id === "mask") ModalModule.close();
+    }
+}
+</script>
+</body>
+</html>
